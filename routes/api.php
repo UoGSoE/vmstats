@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\NotesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,6 +15,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::get('/servers', [\App\Http\Controllers\Api\VmController::class, 'index'])->name('api.server.index');
+Route::post('/vms', [\App\Http\Controllers\Api\VmController::class, 'store'])->name('api.vm.store');
+Route::post('/vms/delete', [\App\Http\Controllers\Api\VmController::class, 'destroyGuest'])->name('api.guest.delete');
+Route::post('/servers/delete', [\App\Http\Controllers\Api\VmController::class, 'destroyServer'])->name('api.server.delete');
+Route::post('/server/notes', [\App\Http\Controllers\Api\NotesController::class, 'updateServer'])->name('api.server.notes');
+Route::post('/guest/notes', [\App\Http\Controllers\Api\NotesController::class, 'updateGuest'])->name('api.guest.notes');

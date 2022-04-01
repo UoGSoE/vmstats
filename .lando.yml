@@ -12,6 +12,10 @@ services:
     portforward: true
     hogfrom:
       - appserver
+  node:
+    type: node
+    build:
+      - npm install
 tooling:
   mfs:
     service: appserver
@@ -25,3 +29,5 @@ tooling:
     service: appserver
     description: "Run phpunit with --filter"
     cmd: php artisan test --filter
+  npm:
+    service: node
