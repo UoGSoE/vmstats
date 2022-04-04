@@ -14,7 +14,7 @@
                             </div>
                             <div class="level-right">
                                 <div class="level-item">
-                                    <button wire:click.prevent="deleteServer({{ $server->id }})" class="button is-small">Delete</button>
+                                    <button wire:click.prevent="deleteServer({{ $server->id }})" class="button is-danger is-outlined is-small">Delete</button>
                                 </div>
                             </div>
                         </div>
@@ -34,7 +34,7 @@
                                             @endif
                                         </td>
                                         <td>
-                                            <button wire:click.prevent="deleteGuest({{ $guest->id }})" class="button is-small">Delete</button>
+                                            <button wire:click.prevent="deleteGuest({{ $guest->id }})" class="button is-danger is-outlined is-small">Delete</button>
                                         </td>
                                     </tr>
                                 @endforeach
