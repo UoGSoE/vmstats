@@ -29,5 +29,9 @@ tooling:
     service: appserver
     description: "Run phpunit with --filter"
     cmd: php artisan test --filter
+  fixldap:
+    service: appserver
+    description: "Set up insecure ldap"
+    cmd: apt-get install -y libldap-common && printf "\nTLS_REQCERT never\n" >> /etc/openldap/ldap.conf
   npm:
     service: node

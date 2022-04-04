@@ -3,12 +3,14 @@
 <div class="level">
     <div class="level-left">
         <div class="level-item">
-            <h1 class="title is-3">VM Stats</h1>
+            <h1 class="title is-3">
+                VM Stats User Management
+            </h1>
         </div>
     </div>
     <div class="level-right">
         <div class="level-item">
-            <a href="{{ route('user.index') }}" class="button">Manage Users</a>
+            <a href="{{ route('home') }}" class="button">Manage Servers</a>
         </div>
         <div class="level-item">
             @auth
@@ -22,6 +24,6 @@
 </div>
 
 <hr>
-@livewire('vm-list')
+@livewire('user-list')
 
 @endsection

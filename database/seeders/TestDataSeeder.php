@@ -17,7 +17,8 @@ class TestDataSeeder extends Seeder
      */
     public function run()
     {
-        $user = User::factory()->create(['username' => 'admin', 'password' => bcrypt('secret')]);
+        $admin = User::factory()->create(['username' => 'admin', 'password' => bcrypt('secret')]);
+        $otherAdmins = User::factory()->count(3)->create(['is_staff' => true]);
         $servers = Server::factory()->times(10)->create();
         $servers->each(function ($server) {
             foreach (range(1, 10) as $i) {
