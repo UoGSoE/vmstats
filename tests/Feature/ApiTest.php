@@ -158,8 +158,8 @@ class ApiTest extends TestCase
     /** @test */
     public function we_can_get_a_list_of_servers_and_their_guests()
     {
-        $server = Server::factory()->create();
-        $otherServer = Server::factory()->create();
+        $server = Server::factory()->create(['name' => 'aaa']);
+        $otherServer = Server::factory()->create(['name' => 'bbb']);
         $guest = Guest::factory()->create(['server_id' => $server->id]);
         $otherGuest = Guest::factory()->create(['server_id' => $server->id]);
 
