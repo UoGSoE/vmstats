@@ -1,4 +1,9 @@
 <div wire:poll.1m>
+    <div class="field is-expanded">
+        <div class="control">
+            <input class="input" type="text" placeholder="Search" wire:model="filter" autofocus>
+        </div>
+    </div>
     <div class="columns">
         <div class="column">
             <ul>
@@ -30,7 +35,7 @@
                                         </td>
                                         <td>
                                             @if ($guest->hasNotes())
-                                                <button wire:click.prevent="setCurrentNotes({{ $guest->id }})" class="button is-small">Notes</button>
+                                                <button wire:click.prevent="setCurrentNotes({{ $guest->id }})" class="button is-small @if ($guest->notes_filter_match) is-success @endif">Notes</button>
                                             @endif
                                         </td>
                                         <td>

@@ -32,6 +32,7 @@ tooling:
   fixldap:
     service: appserver
     description: "Set up insecure ldap"
-    cmd: apt-get install -y libldap-common && printf "\nTLS_REQCERT never\n" >> /etc/openldap/ldap.conf
+    user: root
+    cmd: apt-get update && apt-get install -y libldap-common && printf "\nTLS_REQCERT never\n" >> /etc/ldap/ldap.conf
   npm:
     service: node
