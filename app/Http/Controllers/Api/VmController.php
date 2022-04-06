@@ -24,7 +24,16 @@ class VmController extends Controller
             'guest' => 'required|string|max:255',
             'server_notes' => 'nullable|string|max:2048',
             'guest_notes' => 'nullable|string|max:2048',
+            'server_notes_b64' => 'nullable|string|max:2048',
+            'guest_notes_b64' => 'nullable|string|max:2048',
         ]);
+
+        if (array_key_exists('server_notes_b64', $data) && $data['server_notes_b64']) {
+            $data['server_notes'] = trim(base64_decode($data['server_notes_b64']));
+        }
+        if (array_key_exists('guest_notes_b64', $data) && $data['guest_notes_b64']) {
+            $data['guest_notes'] = trim(base64_decode($data['guest_notes_b64']));
+        }
 
         $server = Server::firstOrCreate(['name' => $data['server']]);
         $server->update(['notes' => $data['server_notes'] ?? null]);

@@ -14,7 +14,12 @@ class NotesController extends Controller
         $data = $request->validate([
             'name' => 'required|string|max:255',
             'notes' => 'nullable|string|max:2048',
+            'notes_b64' => 'nullable|string|max:2048',
         ]);
+
+        if (array_key_exists('notes_b64', $data) && $data['notes_b64']) {
+            $data['notes'] = trim(base64_decode($data['notes_b64']));
+        }
 
         $server = Server::where('name', '=', $data['name'])->firstOrFail();
         $server->update(['notes' => $data['notes'] ?? null]);
@@ -29,7 +34,12 @@ class NotesController extends Controller
         $data = $request->validate([
             'name' => 'required|string|max:255',
             'notes' => 'nullable|string|max:2048',
+            'notes_b64' => 'nullable|string|max:2048',
         ]);
+
+        if (array_key_exists('notes_b64', $data) && $data['notes_b64']) {
+            $data['notes'] = trim(base64_decode($data['notes_b64']));
+        }
 
         $guest = Guest::where('name', '=', $data['name'])->firstOrFail();
         $guest->update(['notes' => $data['notes'] ?? null]);

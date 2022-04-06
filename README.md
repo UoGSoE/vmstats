@@ -19,9 +19,13 @@ It's mostly designed to be used via it's HTTP API using curl or the like.  Avail
 curl -X POST -d 'server=server.example.com' -d 'guest=vm.example.com' https://vmstats.example.com/api/vms
 # record a vm running on a server and add some notes
 curl -X POST -d 'server=server.example.com' -d 'guest=vm.example.com' -d 'guest_notes=I am a VM' -d 'server_notes=I am a server' https://vmstats.example.com/api/vms
+# record a vm running on a server and add some base64 encoded notes
+curl -X POST -d 'server=server.example.com' -d 'guest=vm.example.com' -d 'guest_notes_b64=aSBhbSBhIFZNCg==' -d 'server_notes_b64=aSBhbSBhIHNlcnZlcgo=' https://vmstats.example.com/api/vms
 # update just the notes for a server or vm
 curl -X POST -d 'name=server.example.com' -d 'notes=I am a server' https://vmstats.example.com/api/server/notes
 curl -X POST -d 'name=vm.example.com' -d 'notes=I am a vm' https://vmstats.example.com/api/guest/notes
+curl -X POST -d 'name=server.example.com' -d 'notes_b64=aSBhbSBhIHNlcnZlcgo=' https://vmstats.example.com/api/server/notes
+curl -X POST -d 'name=vm.example.com' -d 'notes=aSBhbSBhIFZNCg==' https://vmstats.example.com/api/guest/notes
 # delete a server or vm
 curl -X POST -d 'name=server.example.com' https://vmstats.example.com/api/servers/delete
 curl -X POST -d 'name=vm.example.com' https://vmstats.example.com/api/vms/delete

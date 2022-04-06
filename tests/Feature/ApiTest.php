@@ -55,6 +55,29 @@ class ApiTest extends TestCase
     }
 
     /** @test */
+    public function we_can_store_an_incoming_vm_guest_request_with_optional_notes_which_can_be_in_base64()
+    {
+        $response = $this->postJson(route('api.vm.store'), [
+            'server' => 'Test Server',
+            'server_notes_b64' => 'aSBhbSBhIGJhc2U2NCBzZXJ2ZXIK',
+            'guest' => 'Test Guest',
+            'guest_notes_b64' => 'aSBhbSBhIGJhc2U2NCBndWVzdAo=',
+        ]);
+
+        $response->assertOk();
+        $this->assertEquals(1, Server::count());
+        $this->assertEquals(1, Guest::count());
+        $server = Server::first();
+        $guest = Guest::first();
+        $this->assertEquals('Test Server', $server->name);
+        $this->assertEquals('i am a base64 server', $server->notes);
+        $this->assertEquals('Test Guest', $guest->name);
+        $this->assertEquals('i am a base64 guest', $guest->notes);
+        $this->assertEquals($server->id, $guest->server_id);
+        $this->assertTrue($server->guests()->first()->is($guest));
+    }
+
+    /** @test */
     public function we_can_update_just_the_notes_for_a_server_or_guest()
     {
         $server = Server::factory()->create(['notes' => 'Test Server']);
@@ -75,6 +98,29 @@ class ApiTest extends TestCase
 
         $response->assertOk();
         $this->assertEquals('La de dah', $server->fresh()->notes);
+    }
+
+    /** @test */
+    public function we_can_update_just_the_notes_for_a_server_or_guest_optionally_in_base64()
+    {
+        $server = Server::factory()->create(['notes' => 'Test Server']);
+        $guest = Guest::factory()->create(['notes' => 'Test Guest']);
+
+        $response = $this->postJson(route('api.guest.notes'), [
+            'name' => $guest->name,
+            'notes_b64' => 'aSBhbSBhIGJhc2U2NCBndWVzdAo=',
+        ]);
+
+        $response->assertOk();
+        $this->assertEquals('i am a base64 guest', $guest->fresh()->notes);
+
+        $response = $this->postJson(route('api.server.notes'), [
+            'name' => $server->name,
+            'notes_b64' => 'aSBhbSBhIGJhc2U2NCBzZXJ2ZXIK',
+        ]);
+
+        $response->assertOk();
+        $this->assertEquals('i am a base64 server', $server->fresh()->notes);
     }
 
     /** @test */
