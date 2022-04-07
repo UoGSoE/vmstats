@@ -32,3 +32,6 @@ curl -X POST -d 'name=vm.example.com' https://vmstats.example.com/api/vms/delete
 # get a list of all the servers and their guests
 curl https://vmstats.example.com/api/servers
 ```
+
+### Example
+There is an example script for using this to record Linux KVM guests in `kvm_vmstats.sh` in the base of the repository.
