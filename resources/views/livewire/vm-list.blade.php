@@ -16,6 +16,11 @@
                                         <a href="{{ $server->wiki_link }}">{{ $server->name }}</a>
                                     </h2>
                                 </div>
+                                <div class="level-item">
+                                    @if ($server->hasNotes())
+                                        <button wire:click.prevent="setCurrentNotesServer({{ $server->id }})" class="button is-small">Notes</button>
+                                    @endif
+                                </div>
                             </div>
                             <div class="level-right">
                                 <div class="level-item">

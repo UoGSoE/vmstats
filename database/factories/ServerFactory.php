@@ -18,6 +18,7 @@ class ServerFactory extends Factory
     {
         return [
             'name' => implode(' ', $this->faker->words()),
+            'notes' => rand(1, 10) > 5 ? implode("\n\n", $this->faker->paragraphs(rand(1, 3))) : null,
         ];
     }
 }

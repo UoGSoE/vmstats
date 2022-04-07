@@ -50,6 +50,13 @@ class VmList extends Component
         $this->currentNotes = nl2br(e($guest->notes));
     }
 
+    public function setCurrentNotesServer(int $serverId)
+    {
+        $server = Server::findOrFail($serverId);
+        $this->currentName = $server->name;
+        $this->currentNotes = nl2br(e($server->notes));
+    }
+
     public function deleteServer(int $serverId)
     {
         $server = Server::findOrFail($serverId);

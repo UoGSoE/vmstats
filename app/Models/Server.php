@@ -16,6 +16,11 @@ class Server extends Model
         return $this->hasMany(Guest::class);
     }
 
+    public function hasNotes(): bool
+    {
+        return (bool) $this->notes;
+    }
+
     public function getWikiLinkAttribute(): string
     {
         return config('vmstats.wiki_base_url') . urlencode($this->name);
