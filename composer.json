@@ -9,7 +9,7 @@
         "brianium/paratest": "^6.4",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^9.2",
-        "laravel/sanctum": "^2.14.1",
+        "laravel/sanctum": "^3.2.1",
         "laravel/tinker": "^2.7",
         "livewire/livewire": "^2.10",
         "sentry/sentry-laravel": "^2.11",
