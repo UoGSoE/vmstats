@@ -3,10 +3,9 @@
 namespace Tests\Feature;
 
 use App\Models\Guest;
-use Tests\TestCase;
 use App\Models\Server;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class ApiTest extends TestCase
 {

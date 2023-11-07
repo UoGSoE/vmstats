@@ -23,6 +23,6 @@ class Server extends Model
 
     public function getWikiLinkAttribute(): string
     {
-        return config('vmstats.wiki_base_url') . urlencode($this->name);
+        return config('vmstats.wiki_base_url').urlencode($this->name);
     }
 }

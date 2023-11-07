@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use App\Models\Guest;
 use App\Models\Server;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 
 class NotesController extends Controller
 {

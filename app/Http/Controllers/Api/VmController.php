@@ -2,18 +2,17 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use App\Models\Guest;
 use App\Models\Server;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Redis;
 
 class VmController extends Controller
 {
     public function index()
     {
         return response()->json([
-            'data' => Server::orderBy('name')->with('guests')->get()
+            'data' => Server::orderBy('name')->with('guests')->get(),
         ]);
     }
 
