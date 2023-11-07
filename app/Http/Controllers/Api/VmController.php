@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Models\Guest;
 use App\Models\Server;
@@ -9,14 +10,14 @@ use Illuminate\Http\Request;
 
 class VmController extends Controller
 {
-    public function index()
+    public function index(): JsonResponse
     {
         return response()->json([
             'data' => Server::orderBy('name')->with('guests')->get(),
         ]);
     }
 
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
         $data = $request->validate([
             'server' => 'required|string|max:255',
@@ -44,7 +45,7 @@ class VmController extends Controller
         ], 200);
     }
 
-    public function destroyServer(Request $request)
+    public function destroyServer(Request $request): JsonResponse
     {
         $data = $request->validate([
             'name' => 'required|string|max:255',
@@ -58,7 +59,7 @@ class VmController extends Controller
         ], 200);
     }
 
-    public function destroyGuest(Request $request)
+    public function destroyGuest(Request $request): JsonResponse
     {
         $data = $request->validate([
             'name' => 'required|string|max:255',

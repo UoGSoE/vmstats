@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Models\Guest;
 use App\Models\Server;
@@ -9,7 +10,7 @@ use Illuminate\Http\Request;
 
 class NotesController extends Controller
 {
-    public function updateServer(Request $request)
+    public function updateServer(Request $request): JsonResponse
     {
         $data = $request->validate([
             'name' => 'required|string|max:255',
@@ -29,7 +30,7 @@ class NotesController extends Controller
         ], 200);
     }
 
-    public function updateGuest(Request $request)
+    public function updateGuest(Request $request): JsonResponse
     {
         $data = $request->validate([
             'name' => 'required|string|max:255',
