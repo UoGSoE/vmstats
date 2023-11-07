@@ -14,7 +14,7 @@ class TestDataSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         $admin = User::factory()->create(['username' => 'admin', 'password' => bcrypt('secret')]);
         $otherAdmins = User::factory()->count(3)->create(['is_staff' => true]);

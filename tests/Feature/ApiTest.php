@@ -12,7 +12,7 @@ class ApiTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function we_can_store_an_incoming_vm_guest_request()
+    public function we_can_store_an_incoming_vm_guest_request(): void
     {
         $response = $this->postJson(route('api.vm.store'), [
             'server' => 'Test Server',
@@ -31,7 +31,7 @@ class ApiTest extends TestCase
     }
 
     /** @test */
-    public function we_can_store_an_incoming_vm_guest_request_with_optional_notes_for_the_guest_and_server()
+    public function we_can_store_an_incoming_vm_guest_request_with_optional_notes_for_the_guest_and_server(): void
     {
         $response = $this->postJson(route('api.vm.store'), [
             'server' => 'Test Server',
@@ -54,7 +54,7 @@ class ApiTest extends TestCase
     }
 
     /** @test */
-    public function we_can_store_an_incoming_vm_guest_request_with_optional_notes_which_can_be_in_base64()
+    public function we_can_store_an_incoming_vm_guest_request_with_optional_notes_which_can_be_in_base64(): void
     {
         $response = $this->postJson(route('api.vm.store'), [
             'server' => 'Test Server',
@@ -77,7 +77,7 @@ class ApiTest extends TestCase
     }
 
     /** @test */
-    public function we_can_update_just_the_notes_for_a_server_or_guest()
+    public function we_can_update_just_the_notes_for_a_server_or_guest(): void
     {
         $server = Server::factory()->create(['notes' => 'Test Server']);
         $guest = Guest::factory()->create(['notes' => 'Test Guest']);
@@ -100,7 +100,7 @@ class ApiTest extends TestCase
     }
 
     /** @test */
-    public function we_can_update_just_the_notes_for_a_server_or_guest_optionally_in_base64()
+    public function we_can_update_just_the_notes_for_a_server_or_guest_optionally_in_base64(): void
     {
         $server = Server::factory()->create(['notes' => 'Test Server']);
         $guest = Guest::factory()->create(['notes' => 'Test Guest']);
@@ -123,7 +123,7 @@ class ApiTest extends TestCase
     }
 
     /** @test */
-    public function storing_the_same_request_twice_doesnt_duplicate_the_data()
+    public function storing_the_same_request_twice_doesnt_duplicate_the_data(): void
     {
         $this->postJson(route('api.vm.store'), [
             'server' => 'Test Server',
@@ -140,7 +140,7 @@ class ApiTest extends TestCase
     }
 
     /** @test */
-    public function changing_the_vm_guests_server_correctly_updates_the_records()
+    public function changing_the_vm_guests_server_correctly_updates_the_records(): void
     {
         $server = Server::factory()->create(['name' => 'Original Server']);
         $guest = Guest::factory()->create(['name' => 'Test Guest', 'server_id' => $server->id]);
@@ -159,7 +159,7 @@ class ApiTest extends TestCase
     }
 
     /** @test */
-    public function we_can_delete_a_vm_server()
+    public function we_can_delete_a_vm_server(): void
     {
         $server = Server::factory()->create(['name' => 'Test Server 1']);
         $otherServer = Server::factory()->create(['name' => 'Test Server 2']);
@@ -180,7 +180,7 @@ class ApiTest extends TestCase
     }
 
     /** @test */
-    public function we_can_delete_a_vm_guest()
+    public function we_can_delete_a_vm_guest(): void
     {
         $server = Server::factory()->create();
         $otherServer = Server::factory()->create();
@@ -201,7 +201,7 @@ class ApiTest extends TestCase
     }
 
     /** @test */
-    public function we_can_get_a_list_of_servers_and_their_guests()
+    public function we_can_get_a_list_of_servers_and_their_guests(): void
     {
         $server = Server::factory()->create(['name' => 'aaa']);
         $otherServer = Server::factory()->create(['name' => 'bbb']);

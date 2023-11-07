@@ -14,7 +14,7 @@ class ServerListUiTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function unauthenticated_users_cant_see_the_server_list()
+    public function unauthenticated_users_cant_see_the_server_list(): void
     {
         $response = $this->get(route('home'));
 
@@ -22,7 +22,7 @@ class ServerListUiTest extends TestCase
     }
 
     /** @test */
-    public function we_can_see_the_main_page_with_the_livewire_server_list_component()
+    public function we_can_see_the_main_page_with_the_livewire_server_list_component(): void
     {
         $user = User::factory()->create();
         $server1 = Server::factory()->create(['name' => 'Server 1']);
@@ -41,7 +41,7 @@ class ServerListUiTest extends TestCase
     }
 
     /** @test */
-    public function we_can_filter_the_list_of_vms_and_servers()
+    public function we_can_filter_the_list_of_vms_and_servers(): void
     {
         $server1 = Server::factory()->create(['name' => 'Server 1']);
         $server2 = Server::factory()->create(['name' => 'Server 2']);
