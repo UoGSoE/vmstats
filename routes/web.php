@@ -17,7 +17,7 @@ Route::get('/login', [\App\Http\Controllers\Auth\LoginController::class, 'login'
 Route::post('/login', [\App\Http\Controllers\Auth\LoginController::class, 'doLogin'])->name('auth.do_login');
 Route::post('/logout', [\App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('auth.logout');
 
-Route::group(['middleware' => 'auth'], function () {
+Route::middleware('auth')->group(function () {
     Route::get('/', [\App\Http\Controllers\HomeController::class, 'index'])->name('home');
     Route::get('/users', [\App\Http\Controllers\UserController::class, 'index'])->name('user.index');
 });
