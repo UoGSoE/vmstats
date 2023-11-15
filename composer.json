@@ -12,10 +12,10 @@
         "brianium/paratest": "^6.4",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^10.32",
-        "laravel/sanctum": "^3.2",
+        "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",
         "livewire/livewire": "^2.11",
-        "sentry/sentry-laravel": "^3.2",
+        "sentry/sentry-laravel": "^3.8",
         "uogsoe/ldap-laravel": "^3.0"
     },
     "require-dev": {
