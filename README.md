@@ -1,5 +1,5 @@
 # VMStats
-This is a basic Laravel app to record which VM servers and guests are kicking about
+This is a basic Laravel app to record which VM servers and guests are kicking about.
 
 ## Web front end
 You should be able to log in at https://your-vmstats.example.com/login.  If it's a brand new install you will need to create a user beforehand though (after that you can manage other users through the UI) :
