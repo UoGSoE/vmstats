@@ -5,8 +5,6 @@ use App\Models\Server;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-uses(TestCase::class);
-uses(RefreshDatabase::class);
 
 test('we can store an incoming vm guest request', function () {
     $response = $this->postJson(route('api.vm.store'), [
