@@ -15,14 +15,14 @@ test('we can store an incoming vm guest request', function () {
     ]);
 
     $response->assertOk();
-    $this->assertEquals(1, Server::count());
-    $this->assertEquals(1, Guest::count());
+    expect(Server::count())->toEqual(1);
+    expect(Guest::count())->toEqual(1);
     $server = Server::first();
     $guest = Guest::first();
-    $this->assertEquals('Test Server', $server->name);
-    $this->assertEquals('Test Guest', $guest->name);
-    $this->assertEquals($server->id, $guest->server_id);
-    $this->assertTrue($server->guests()->first()->is($guest));
+    expect($server->name)->toEqual('Test Server');
+    expect($guest->name)->toEqual('Test Guest');
+    expect($guest->server_id)->toEqual($server->id);
+    expect($server->guests()->first()->is($guest))->toBeTrue();
 });
 
 test('we can store an incoming vm guest request with optional notes for the guest and server', function () {
@@ -34,16 +34,16 @@ test('we can store an incoming vm guest request with optional notes for the gues
     ]);
 
     $response->assertOk();
-    $this->assertEquals(1, Server::count());
-    $this->assertEquals(1, Guest::count());
+    expect(Server::count())->toEqual(1);
+    expect(Guest::count())->toEqual(1);
     $server = Server::first();
     $guest = Guest::first();
-    $this->assertEquals('Test Server', $server->name);
-    $this->assertEquals('Blah blah blah', $server->notes);
-    $this->assertEquals('Test Guest', $guest->name);
-    $this->assertEquals('Tum te tum', $guest->notes);
-    $this->assertEquals($server->id, $guest->server_id);
-    $this->assertTrue($server->guests()->first()->is($guest));
+    expect($server->name)->toEqual('Test Server');
+    expect($server->notes)->toEqual('Blah blah blah');
+    expect($guest->name)->toEqual('Test Guest');
+    expect($guest->notes)->toEqual('Tum te tum');
+    expect($guest->server_id)->toEqual($server->id);
+    expect($server->guests()->first()->is($guest))->toBeTrue();
 });
 
 test('we can store an incoming vm guest request with optional notes which can be in base64', function () {
@@ -55,16 +55,16 @@ test('we can store an incoming vm guest request with optional notes which can be
     ]);
 
     $response->assertOk();
-    $this->assertEquals(1, Server::count());
-    $this->assertEquals(1, Guest::count());
+    expect(Server::count())->toEqual(1);
+    expect(Guest::count())->toEqual(1);
     $server = Server::first();
     $guest = Guest::first();
-    $this->assertEquals('Test Server', $server->name);
-    $this->assertEquals('i am a base64 server', $server->notes);
-    $this->assertEquals('Test Guest', $guest->name);
-    $this->assertEquals('i am a base64 guest', $guest->notes);
-    $this->assertEquals($server->id, $guest->server_id);
-    $this->assertTrue($server->guests()->first()->is($guest));
+    expect($server->name)->toEqual('Test Server');
+    expect($server->notes)->toEqual('i am a base64 server');
+    expect($guest->name)->toEqual('Test Guest');
+    expect($guest->notes)->toEqual('i am a base64 guest');
+    expect($guest->server_id)->toEqual($server->id);
+    expect($server->guests()->first()->is($guest))->toBeTrue();
 });
 
 test('we can update just the notes for a server or guest', function () {
@@ -77,7 +77,7 @@ test('we can update just the notes for a server or guest', function () {
     ]);
 
     $response->assertOk();
-    $this->assertEquals('Tum te tum', $guest->fresh()->notes);
+    expect($guest->fresh()->notes)->toEqual('Tum te tum');
 
     $response = $this->postJson(route('api.server.notes'), [
         'name' => $server->name,
@@ -85,7 +85,7 @@ test('we can update just the notes for a server or guest', function () {
     ]);
 
     $response->assertOk();
-    $this->assertEquals('La de dah', $server->fresh()->notes);
+    expect($server->fresh()->notes)->toEqual('La de dah');
 });
 
 test('we can update just the notes for a server or guest optionally in base64', function () {
@@ -98,7 +98,7 @@ test('we can update just the notes for a server or guest optionally in base64', 
     ]);
 
     $response->assertOk();
-    $this->assertEquals('i am a base64 guest', $guest->fresh()->notes);
+    expect($guest->fresh()->notes)->toEqual('i am a base64 guest');
 
     $response = $this->postJson(route('api.server.notes'), [
         'name' => $server->name,
@@ -106,7 +106,7 @@ test('we can update just the notes for a server or guest optionally in base64', 
     ]);
 
     $response->assertOk();
-    $this->assertEquals('i am a base64 server', $server->fresh()->notes);
+    expect($server->fresh()->notes)->toEqual('i am a base64 server');
 });
 
 test('storing the same request twice doesnt duplicate the data', function () {
@@ -120,8 +120,8 @@ test('storing the same request twice doesnt duplicate the data', function () {
         'guest' => 'Test Guest',
     ]);
 
-    $this->assertEquals(1, Server::count());
-    $this->assertEquals(1, Guest::count());
+    expect(Server::count())->toEqual(1);
+    expect(Guest::count())->toEqual(1);
 });
 
 test('changing the vm guests server correctly updates the records', function () {
@@ -133,12 +133,12 @@ test('changing the vm guests server correctly updates the records', function () 
         'guest' => 'Test Guest',
     ]);
 
-    $this->assertEquals(2, Server::count());
-    $this->assertEquals(1, Guest::count());
-    $this->assertEquals(0, $server->guests()->count());
+    expect(Server::count())->toEqual(2);
+    expect(Guest::count())->toEqual(1);
+    expect($server->guests()->count())->toEqual(0);
     $newServer = Server::where('name', '=', 'New Server')->first();
-    $this->assertEquals(1, $newServer->guests()->count());
-    $this->assertTrue($newServer->guests()->first()->is($guest));
+    expect($newServer->guests()->count())->toEqual(1);
+    expect($newServer->guests()->first()->is($guest))->toBeTrue();
 });
 
 test('we can delete a vm server', function () {
@@ -147,15 +147,15 @@ test('we can delete a vm server', function () {
     $guest = Guest::factory()->create(['server_id' => $server->id]);
     $otherGuest = Guest::factory()->create(['server_id' => $otherServer->id]);
 
-    $this->assertEquals(2, Server::count());
-    $this->assertEquals(2, Guest::count());
+    expect(Server::count())->toEqual(2);
+    expect(Guest::count())->toEqual(2);
 
     $this->postJson(route('api.server.delete'), [
         'name' => 'Test Server 1',
     ]);
 
-    $this->assertEquals(1, Server::count());
-    $this->assertEquals(1, Guest::count());
+    expect(Server::count())->toEqual(1);
+    expect(Guest::count())->toEqual(1);
     $this->assertDatabaseHas('servers', ['name' => $otherServer->name]);
     $this->assertDatabaseHas('guests', ['name' => $otherGuest->name]);
 });
@@ -166,17 +166,17 @@ test('we can delete a vm guest', function () {
     $guest = Guest::factory()->create(['server_id' => $server->id]);
     $otherGuest = Guest::factory()->create(['server_id' => $server->id]);
 
-    $this->assertEquals(2, Server::count());
-    $this->assertEquals(2, Guest::count());
+    expect(Server::count())->toEqual(2);
+    expect(Guest::count())->toEqual(2);
 
     $this->postJson(route('api.guest.delete'), [
         'name' => $guest->name,
     ]);
 
-    $this->assertEquals(2, Server::count());
-    $this->assertEquals(1, Guest::count());
-    $this->assertEquals(1, $server->guests()->count());
-    $this->assertTrue($server->guests()->first()->is($otherGuest));
+    expect(Server::count())->toEqual(2);
+    expect(Guest::count())->toEqual(1);
+    expect($server->guests()->count())->toEqual(1);
+    expect($server->guests()->first()->is($otherGuest))->toBeTrue();
 });
 
 test('we can get a list of servers and their guests', function () {
