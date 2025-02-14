@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -11,7 +12,7 @@ class Server extends Model
 
     protected $fillable = ['name', 'notes'];
 
-    public function guests()
+    public function guests(): HasMany
     {
         return $this->hasMany(Guest::class);
     }
