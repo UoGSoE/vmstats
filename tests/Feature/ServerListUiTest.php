@@ -3,10 +3,7 @@
 use App\Models\Guest;
 use App\Models\Server;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
-use Tests\TestCase;
-
 
 test('unauthenticated users cant see the server list', function () {
     $response = $this->get(route('home'));
