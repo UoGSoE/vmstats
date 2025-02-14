@@ -2,7 +2,7 @@ name: vmstats
 recipe: laravel
 config:
   webroot: public
-  php: '8.1'
+  php: '8.2'
   cache: redis
 excludes:
   - node_modules
@@ -13,7 +13,9 @@ services:
     hogfrom:
       - appserver
   node:
-    type: node
+    type: node:22
+    ports:
+      - 3009:3009
     build:
       - npm install
 tooling:
