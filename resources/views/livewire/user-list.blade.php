@@ -15,13 +15,12 @@
                         <flux:table.cell>
                             @if (auth()->id() != $user->id)
                                 <flux:button 
-                                    wire:click.prevent="deleteUser({{ $user->id }})"
+                                    wire:click="deleteUser({{ $user->id }})"
                                     variant="danger"
                                     size="sm"
                                     icon="trash"
-                                >
-                                    Delete
-                                </flux:button>
+                                    inset="top bottom"
+                                />
                             @endif
                         </flux:table.cell>
                     </flux:table.row>
@@ -35,21 +34,22 @@
             <flux:heading size="lg" class="mb-6">Add User</flux:heading>
             
             <div class="mb-6">
-                <flux:input.group>
-                    <flux:input 
-                        wire:model="username"
-                        label="Username"
-                        placeholder="Username"
-                        class="flex-1"
-                    />
-                    <flux:button 
-                        wire:click.prevent="lookupUser"
-                        variant="primary"
-                        class="ml-2"
-                    >
-                        Lookup
-                    </flux:button>
-                </flux:input.group>
+                <flux:input 
+                    wire:model="username"
+                    label="Username"
+                    placeholder="Username"
+                >
+                    <x-slot name="iconTrailing">
+                        <flux:button 
+                            wire:click="lookupUser"
+                            variant="primary"
+                            size="sm"
+                            class="-mr-1"
+                        >
+                            Lookup
+                        </flux:button>
+                    </x-slot>
+                </flux:input>
                 
                 @if ($error)
                     <flux:text variant="danger" class="mt-2">{{ $error }}</flux:text>

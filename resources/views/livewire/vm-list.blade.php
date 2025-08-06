@@ -1,16 +1,17 @@
 <div wire:poll.1m>
-    <div class="mb-6">
+    <div class="mb-6 max-w-md">
         <flux:input 
-            wire:model="filter" 
+            wire:model.live="filter" 
             placeholder="Search" 
             icon="magnifying-glass"
             autofocus
         />
     </div>
     
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div class="lg:col-span-2">
-            @foreach ($servers as $server)
+    <div class="w-full md:w-3/4 mx-auto">
+        <div class="grid grid-cols-1 {{ $currentNotes ? 'lg:grid-cols-3' : 'lg:grid-cols-1' }} gap-6">
+            <div class="{{ $currentNotes ? 'lg:col-span-2' : '' }}">
+                @foreach ($servers as $server)
                 <div id="server-row-{{ $server->id }}" class="mb-8">
                     <div class="flex items-center justify-between mb-4">
                         <div class="flex items-center gap-4">
@@ -21,7 +22,7 @@
                             </flux:heading>
                             @if ($server->hasNotes())
                                 <flux:button 
-                                    wire:click.prevent="setCurrentNotesServer({{ $server->id }})"
+                                    wire:click="setCurrentNotesServer({{ $server->id }})"
                                     variant="subtle"
                                     size="sm"
                                 >
@@ -30,13 +31,12 @@
                             @endif
                         </div>
                         <flux:button 
-                            wire:click.prevent="deleteServer({{ $server->id }})"
+                            wire:click="deleteServer({{ $server->id }})"
                             variant="danger"
                             size="sm"
                             icon="trash"
-                        >
-                            Delete
-                        </flux:button>
+                            inset="top bottom"
+                        />
                     </div>
                     
                     @if ($server->guests->count() > 0)
@@ -55,7 +55,7 @@
                                         <flux:table.cell>
                                             @if ($guest->hasNotes())
                                                 <flux:button 
-                                                    wire:click.prevent="setCurrentNotes({{ $guest->id }})"
+                                                    wire:click="setCurrentNotes({{ $guest->id }})"
                                                     variant="{{ $guest->notes_filter_match ? 'primary' : 'subtle' }}"
                                                     size="sm"
                                                 >
@@ -65,13 +65,12 @@
                                         </flux:table.cell>
                                         <flux:table.cell>
                                             <flux:button 
-                                                wire:click.prevent="deleteGuest({{ $guest->id }})"
+                                                wire:click="deleteGuest({{ $guest->id }})"
                                                 variant="danger"
                                                 size="sm"
                                                 icon="trash"
-                                            >
-                                                Delete
-                                            </flux:button>
+                                                inset="top bottom"
+                                            />
                                         </flux:table.cell>
                                     </flux:table.row>
                                 @endforeach
@@ -81,16 +80,17 @@
                         <flux:text variant="muted" class="mb-6">No guests found for this server</flux:text>
                     @endif
                 </div>
-            @endforeach
-        </div>
-        
-        <div class="lg:col-span-1">
-            @if ($currentNotes)
-                <flux:card class="sticky top-4">
-                    <flux:heading size="md">Notes for {{ $currentName }}</flux:heading>
-                    <flux:text class="mt-4 font-mono text-sm">{!! $currentNotes !!}</flux:text>
-                </flux:card>
-            @endif
+                @endforeach
+            </div>
+            
+            <div class="lg:col-span-1">
+                @if ($currentNotes)
+                    <flux:card class="sticky top-4">
+                        <flux:heading size="md">Notes for {{ $currentName }}</flux:heading>
+                        <flux:text class="mt-4 font-mono text-sm">{!! $currentNotes !!}</flux:text>
+                    </flux:card>
+                @endif
+            </div>
         </div>
     </div>
 </div>
