@@ -1,68 +1,91 @@
-<div>
-    <div class="columns">
-        <div class="column">
-            <table class="table is-fullwidth is-striped is-hoverable">
-                <thead>
-                    <tr>
-                        <th>Username</th>
-                        <th>Email</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($users as $user)
-                        <tr id="user-row-{{ $user->id }}">
-                            <td>{{ $user->username }}</td>
-                            <td>{{ $user->email }}</td>
-                            <td>
-                                @if (auth()->id() != $user->id)
-                                    <button wire:click.prevent="deleteUser({{ $user->id }})" class="button is-danger is-outlined is-small">Delete</button>
-                                @endif
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
-        <div class="column">
-            <form action="" method="post">
-                @csrf
-                <label class="label">Username</label>
-                <div class="field has-addons">
-                    <div class="control">
-                        <input wire:model="username" type="text" class="input" name="username" placeholder="Username">
-                    </div>
-                    <div class="control">
-                        <button wire:click.prevent="lookupUser" class="button is-info">Lookup</button>
-                    </div>
-                </div>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <div>
+        <flux:table>
+            <flux:table.columns>
+                <flux:table.column>Username</flux:table.column>
+                <flux:table.column>Email</flux:table.column>
+                <flux:table.column></flux:table.column>
+            </flux:table.columns>
+            
+            <flux:table.rows>
+                @foreach ($users as $user)
+                    <flux:table.row :key="$user->id" id="user-row-{{ $user->id }}">
+                        <flux:table.cell>{{ $user->username }}</flux:table.cell>
+                        <flux:table.cell>{{ $user->email }}</flux:table.cell>
+                        <flux:table.cell>
+                            @if (auth()->id() != $user->id)
+                                <flux:button 
+                                    wire:click.prevent="deleteUser({{ $user->id }})"
+                                    variant="danger"
+                                    size="sm"
+                                    icon="trash"
+                                >
+                                    Delete
+                                </flux:button>
+                            @endif
+                        </flux:table.cell>
+                    </flux:table.row>
+                @endforeach
+            </flux:table.rows>
+        </flux:table>
+    </div>
+    
+    <div>
+        <flux:card>
+            <flux:heading size="lg" class="mb-6">Add User</flux:heading>
+            
+            <div class="mb-6">
+                <flux:input.group>
+                    <flux:input 
+                        wire:model="username"
+                        label="Username"
+                        placeholder="Username"
+                        class="flex-1"
+                    />
+                    <flux:button 
+                        wire:click.prevent="lookupUser"
+                        variant="primary"
+                        class="ml-2"
+                    >
+                        Lookup
+                    </flux:button>
+                </flux:input.group>
+                
                 @if ($error)
-                    <p class="help is-danger">{{ $error }}</p>
+                    <flux:text variant="danger" class="mt-2">{{ $error }}</flux:text>
                 @endif
-                <div class="field">
-                    <label class="label">Email</label>
-                    <div class="control">
-                        <input wire:model="email" type="text" class="input" name="email" placeholder="Email" disabled>
-                    </div>
-                </div>
-                <div class="field">
-                    <label class="label">Forenames</label>
-                    <div class="control">
-                        <input wire:model="forenames" type="text" class="input" name="forenames" disabled>
-                    </div>
-                </div>
-                <div class="field">
-                    <label class="label">Surname</label>
-                    <div class="control">
-                        <input wire:model="surname" type="text" class="input" name="surname" disabled>
-                    </div>
-                </div>
-                <div class="field">
-                    <div class="control">
-                        <button wire:click.prevent="createUser" class="button is-primary" @if (! $email) disabled @endif>Add</button>
-                    </div>
-                </div>
-            </form>
-        </div>
+            </div>
+            
+            <div class="space-y-4 mb-6">
+                <flux:input 
+                    wire:model="email"
+                    label="Email"
+                    placeholder="Email"
+                    type="email"
+                    :disabled="true"
+                />
+                
+                <flux:input 
+                    wire:model="forenames"
+                    label="Forenames"
+                    :disabled="true"
+                />
+                
+                <flux:input 
+                    wire:model="surname"
+                    label="Surname"
+                    :disabled="true"
+                />
+            </div>
+            
+            <flux:button 
+                wire:click.prevent="createUser"
+                variant="primary"
+                :disabled="!$email"
+                class="w-full"
+            >
+                Add User
+            </flux:button>
+        </flux:card>
     </div>
 </div>

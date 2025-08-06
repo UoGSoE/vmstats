@@ -23,6 +23,6 @@ Route::post('/logout', [\App\Http\Controllers\Auth\LoginController::class, 'logo
 Route::get('/logged_out', [\App\Http\Controllers\Auth\LoginController::class, 'loggedOut'])->name('logged_out');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/', [\App\Http\Controllers\HomeController::class, 'index'])->name('home');
+    Route::get('/', \App\Livewire\VmList::class)->name('home');
     Route::get('/users', [\App\Http\Controllers\UserController::class, 'index'])->name('user.index');
 });

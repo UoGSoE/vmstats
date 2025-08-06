@@ -1,48 +1,57 @@
-@extends('components.layouts.app')
-@section('content')
-<div class="loginbox">
-            <div class="columns is-centered">
-
-                <div class="column is-one-third box">
-
-                    <div class="shadow-lg login-form">
-                        <div class="login-header">
-                            <h1 class="title is-1">VMStats Login</h1>
-                        </div>
-                        @error('authentication')
-                        <article style="background: #FF7777; color: white; text-align: center;" class="p-8" v-show="errorMessage">
-                            <b>{{ $message }}</b>
-                        </article>
-                        @enderror
-
-                        <form key="2" method="POST" action="{{ route('auth.do_login') }}" class=" p-8 ">
-                            @csrf
-                            <div class="field">
-                                <label class="label">Username</label>
-                                <p class="control">
-                                    <input class="input" type="text" name="username" required autofocus>
-                                </p>
-                                @error('username')
-                                <p class="help is-danger">{{ $message }}</p>
-                                @enderror
-                            </div>
-                                <div class="field">
-                                    <label class="label">Password</label>
-                                    <p class="control">
-                                        <input class="input" type="password" name="password" required>
-                                    </p>
-                                    @error('password')
-                                    <p class="help is-danger">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                            <hr />
-                            <div class="field">
-                                <button class="button is-info is-fullwidth">Log In</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
+<x-layouts.app>
+    <x-slot name="title">Login</x-slot>
+    
+    <div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-md w-full space-y-8">
+            <div class="text-center">
+                <flux:heading size="xl" class="mb-2">VMStats Login</flux:heading>
+                <flux:text variant="muted">Enter your credentials to access the system</flux:text>
             </div>
-        </div><!-- loginbox -->
+            
+            @error('authentication')
+                <flux:callout variant="danger" icon="exclamation-triangle">
+                    <strong>{{ $message }}</strong>
+                </flux:callout>
+            @enderror
+            
+            <flux:card class="mt-8">
+                <form method="POST" action="{{ route('login.do') }}">
+                    @csrf
+                    
+                    <div class="space-y-6">
+                        <flux:input 
+                            type="text"
+                            name="username"
+                            label="Username"
+                            required
+                            autofocus
+                        />
+                        @error('username')
+                            <flux:text variant="danger" class="mt-1">{{ $message }}</flux:text>
+                        @enderror
+                        
+                        <flux:input 
+                            type="password"
+                            name="password"
+                            label="Password"
+                            required
+                        />
+                        @error('password')
+                            <flux:text variant="danger" class="mt-1">{{ $message }}</flux:text>
+                        @enderror
+                    </div>
+                    
+                    <flux:separator class="my-6" />
+                    
+                    <flux:button 
+                        type="submit"
+                        variant="primary"
+                        class="w-full"
+                    >
+                        Log In
+                    </flux:button>
+                </form>
+            </flux:card>
+        </div>
     </div>
-@endsection
+</x-layouts.app>

@@ -18,7 +18,7 @@ class VmList extends Component
     {
         return view('livewire.vm-list', [
             'servers' => $this->getFilteredVmList(),
-        ]);
+        ])->layout('components.layouts.app');
     }
 
     public function getFilteredVmList()
