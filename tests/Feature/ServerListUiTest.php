@@ -8,7 +8,7 @@ use Livewire\Livewire;
 test('unauthenticated users cant see the server list', function () {
     $response = $this->get(route('home'));
 
-    $response->assertRedirect(route('auth.login'));
+    $response->assertRedirect(route('login'));
 });
 
 test('we can see the main page with the livewire server list component', function () {
