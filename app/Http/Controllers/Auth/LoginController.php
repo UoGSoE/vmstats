@@ -32,7 +32,12 @@ class LoginController extends Controller
     {
         Auth::logout();
 
-        return redirect()->route('home');
+        return redirect()->route('logged_out');
+    }
+
+    public function loggedOut(): View
+    {
+        return view('auth.logged_out');
     }
 
     protected function attemptLogin(Request $request)

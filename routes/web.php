@@ -20,6 +20,7 @@ Route::get('/auth/callback', [\App\Http\Controllers\Auth\SSOController::class, '
 #Route::get('/login', [\App\Http\Controllers\Auth\LoginController::class, 'login'])->name('auth.login');
 #Route::post('/login', [\App\Http\Controllers\Auth\LoginController::class, 'doLogin'])->name('auth.do_login');
 Route::post('/logout', [\App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('auth.logout');
+Route::get('/logged_out', [\App\Http\Controllers\Auth\LoginController::class, 'loggedOut'])->name('logged_out');
 
 Route::middleware('auth')->group(function () {
     Route::get('/', [\App\Http\Controllers\HomeController::class, 'index'])->name('home');
