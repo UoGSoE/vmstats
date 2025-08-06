@@ -15,7 +15,7 @@ class GuestFactory extends Factory
      *
      * @return array<string, mixed>
      */
-    public function definition()
+    public function definition(): array
     {
         return [
             'name' => implode(' ', $this->faker->words()),

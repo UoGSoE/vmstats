@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Server extends Model
 {
@@ -11,7 +12,7 @@ class Server extends Model
 
     protected $fillable = ['name', 'notes'];
 
-    public function guests()
+    public function guests(): HasMany
     {
         return $this->hasMany(Guest::class);
     }
@@ -23,6 +24,6 @@ class Server extends Model
 
     public function getWikiLinkAttribute(): string
     {
-        return config('vmstats.wiki_base_url') . urlencode($this->name);
+        return config('vmstats.wiki_base_url').urlencode($this->name);
     }
 }
