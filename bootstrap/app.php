@@ -20,6 +20,8 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->redirectUsersTo(AppServiceProvider::HOME);
 
         $middleware->throttleApi();
+
+        $middleware->trustProxies(at: '*');
     })
     ->withExceptions(function (Exceptions $exceptions) {
         Integration::handles($exceptions);
