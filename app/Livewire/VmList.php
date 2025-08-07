@@ -52,6 +52,7 @@ class VmList extends Component
         $guest = Guest::findOrFail($guestId);
         $this->currentName = $guest->name;
         $this->currentNotes = nl2br(e($guest->notes));
+        $this->modal('show-notes')->show();
     }
 
     public function setCurrentNotesServer(int $serverId)
@@ -59,6 +60,7 @@ class VmList extends Component
         $server = Server::findOrFail($serverId);
         $this->currentName = $server->name;
         $this->currentNotes = nl2br(e($server->notes));
+        $this->modal('show-notes')->show();
     }
 
     public function deleteServer(int $serverId)

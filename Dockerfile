@@ -1,3 +1,4 @@
+# syntax=docker/dockerfile:1.4
 ### PHP version we are targetting
 ARG PHP_VERSION=8.2
 
@@ -27,23 +28,43 @@ COPY database/factories database/factories
 
 COPY composer.* ./
 
-RUN composer install \
-    --no-interaction \
-    --no-plugins \
-    --no-scripts \
-    --no-dev \
-    --prefer-dist
+USER root
+RUN --mount=type=secret,id=FLUX_USERNAME \
+    --mount=type=secret,id=FLUX_LICENSE_KEY \
+        sh -c ' \
+      export FLUX_USERNAME=$(cat /run/secrets/FLUX_USERNAME) && \
+      export FLUX_LICENSE_KEY=$(cat /run/secrets/FLUX_LICENSE_KEY) && \
+      export COMPOSER_ALLOW_SUPERUSER=1 && \
+      mkdir -p ./composer-auth && \
+      export COMPOSER_HOME="$(pwd)/composer-auth" && \
+      composer config --auth http-basic.composer.fluxui.dev "$FLUX_USERNAME" "$FLUX_LICENSE_KEY" && \
+      composer install \
+        --no-interaction \
+        --no-plugins \
+        --no-scripts \
+        --no-dev \
+        --prefer-dist && \
+      chown -R nobody /var/www/html'
+
 
 ### QA php dependencies
 FROM prod-composer as qa-composer
 ENV APP_ENV=local
 ENV APP_DEBUG=1
 
-RUN composer install \
+USER root
+RUN --mount=type=secret,id=FLUX_USERNAME \
+    --mount=type=secret,id=FLUX_LICENSE_KEY \
+    FLUX_USERNAME=$(cat /run/secrets/FLUX_USERNAME) \
+    FLUX_LICENSE_KEY=$(cat /run/secrets/FLUX_LICENSE_KEY) \
+    COMPOSER_ALLOW_SUPERUSER=1 \
+    composer config http-basic.composer.fluxui.dev "${FLUX_USERNAME}" "${FLUX_LICENSE_KEY}" \
+    && composer install \
     --no-interaction \
     --no-plugins \
     --no-scripts \
-    --prefer-dist
+    --prefer-dist \
+    && chown -R nobody /var/www/html
 
 
 ### Build JS/css assets
