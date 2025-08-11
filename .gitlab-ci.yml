@@ -80,7 +80,8 @@ build-qa-tagged:
   image: docker:stable
   script:
   - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
-  - DOCKER_BUILDKIT=1 docker build --secret id=FLUX_USERNAME,env=FLUX_USERNAME --secret id=FLUX_LICENSE_KEY,env=FLUX_LICENSE_KEY --build-arg PHP_VERSION=${PHP_VERSION} --target=ci -t $QA_IMAGE_NAME .
+  - echo "FLUX_USERNAME=${FLUX_USERNAME}"
+  - DOCKER_BUILDKIT=1 docker build --secret id=FLUX_USERNAME --secret id=FLUX_LICENSE_KEY --build-arg PHP_VERSION=${PHP_VERSION} --target=ci -t $QA_IMAGE_NAME .
   - docker push $QA_IMAGE_NAME
 
 build-prod-tagged:
