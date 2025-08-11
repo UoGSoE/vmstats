@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Log;
 use Laravel\Socialite\Facades\Socialite;
 
 class SSOController extends Controller
@@ -52,6 +53,7 @@ class SSOController extends Controller
         $ssoUser = Socialite::driver('keycloak')->user();
 
         if ($this->forbidsStudentsFromLoggingIn($ssoUser)) {
+            Log::warning('Denying student login attempt', ['email' => $ssoUser->email]);
             abort(403, 'Students are not allowed to login');
         }
 
@@ -60,6 +62,7 @@ class SSOController extends Controller
         $user = User::where('email', $ssoDetails['email'])->first();
 
         if ($this->onlyAdminsCanLogin($user)) {
+            Log::warning('Denying login attempt by non-admin', ['email' => $ssoDetails['email']]);
             abort(403, 'Only admins can login');
         }
 
@@ -68,10 +71,12 @@ class SSOController extends Controller
         }
 
         if (!$user) {
+            Log::warning('Denying login attempt for unknown user', ['email' => $ssoDetails['email']]);
             abort(403, 'Authentication failed');
         }
 
-        Auth::login($user, true);
+        Auth::login($user, false);
+        session()->regenerate();  // regenerate the session ID to prevent session fixation attacks
 
         return $this->getSuccessRedirect();
     }
@@ -101,8 +106,8 @@ class SSOController extends Controller
         return [
             'email' => strtolower(trim($ssoUser->email)),
             'username' => strtolower(trim($ssoUser->nickname)),
-            'surname' => trim($ssoUser->user['family_name']),
-            'forenames' => trim($ssoUser->user['given_name']),
+            'surname' => trim(data_get($ssoUser->user, 'family_name', '')),
+            'forenames' => trim(data_get($ssoUser->user, 'given_name', '')),
             'is_staff' => $this->isStaff($ssoUser),
         ];
     }
@@ -132,6 +137,6 @@ class SSOController extends Controller
     private function looksLikeMatric(string $username): bool
     {
         // Matric numbers are 7 digits (for now), followed by a letter
-        return preg_match('/^[0-9]{7}[a-z]?$/', strtolower(trim($username))) === 1;
+        return preg_match('/^[0-9]{7}[a-z]$/i', strtolower(trim($username))) === 1;
     }
 }
