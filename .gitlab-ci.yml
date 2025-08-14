@@ -92,6 +92,8 @@ build-prod-tagged:
   - master
   script:
   - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+  - echo $FLUX_USERNAME > FLUX_USERNAME
+  - echo $FLUX_LICENSE_KEY > FLUX_LICENSE_KEY
   - DOCKER_BUILDKIT=1 docker build --secret id=FLUX_USERNAME --secret id=FLUX_LICENSE_KEY --build-arg PHP_VERSION=${PHP_VERSION} --target=prod -t $PROD_IMAGE_NAME .
   - docker push $PROD_IMAGE_NAME
 
