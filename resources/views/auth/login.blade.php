@@ -1,56 +1,54 @@
 <x-layouts.app>
-    <x-slot name="title">Login</x-slot>
-    
-    <div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-        <div class="max-w-md w-full space-y-8">
-            <div class="text-center">
-                <flux:heading size="xl" class="mb-2">VMStats Login</flux:heading>
-                <flux:text variant="muted">Enter your credentials to access the system</flux:text>
-            </div>
-            
-            @error('authentication')
-                <flux:callout variant="danger" icon="exclamation-triangle">
-                    <strong>{{ $message }}</strong>
-                </flux:callout>
-            @enderror
-            
-            <flux:card class="mt-8">
-                <form method="POST" action="{{ route('login.do') }}">
-                    @csrf
-                    
-                    <div class="space-y-6">
-                        <flux:input 
-                            type="text"
+    <div class="py-16 flex items-center justify-center">
+        <div class="w-full max-w-md">
+            <flux:card class="space-y-6">
+                @if (config('sso.enabled', true))
+                    <flux:button type="submit" variant="primary" class="w-full" href="{{ route('login.sso') }}">Sign in with SSO</flux:button>
+                @else
+                    <div>
+                        <flux:heading size="lg">Sign in</flux:heading>
+                        <flux:subheading>Enter your credentials to access your account.</flux:subheading>
+                    </div>
+
+                    @if ($errors->any())
+                        <flux:callout variant="danger" icon="exclamation-triangle">
+                            <flux:callout.heading>Unable to sign in</flux:callout.heading>
+                            <flux:callout.text>
+                                <ul class="list-disc pl-5 space-y-1">
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </flux:callout.text>
+                        </flux:callout>
+                    @endif
+
+                    <form method="POST" action="{{ route('login.local') }}" class="space-y-6">
+                        @csrf
+
+                        <flux:input
                             name="username"
+                            id="username"
                             label="Username"
-                            required
-                            autofocus
+                            autocomplete="username"
+                            placeholder="Username"
+                            icon="user"
                         />
-                        @error('username')
-                            <flux:text variant="danger" class="mt-1">{{ $message }}</flux:text>
-                        @enderror
-                        
-                        <flux:input 
+
+                        <flux:input
                             type="password"
                             name="password"
+                            id="password"
                             label="Password"
-                            required
+                            autocomplete="current-password"
+                            placeholder="••••••••"
+                            viewable
+                            icon="lock-closed"
                         />
-                        @error('password')
-                            <flux:text variant="danger" class="mt-1">{{ $message }}</flux:text>
-                        @enderror
-                    </div>
-                    
-                    <flux:separator class="my-6" />
-                    
-                    <flux:button 
-                        type="submit"
-                        variant="primary"
-                        class="w-full"
-                    >
-                        Log In
-                    </flux:button>
-                </form>
+
+                        <flux:button type="submit" variant="primary" class="w-full">Sign in</flux:button>
+                    </form>
+                @endif
             </flux:card>
         </div>
     </div>

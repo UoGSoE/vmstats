@@ -2,32 +2,30 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Models\User;
-use Illuminate\Support\Str;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
+use Illuminate\View\View;
 use Laravel\Socialite\Facades\Socialite;
+use Livewire\Features\SupportRedirects\Redirector as LivewireRedirector;
 
 class SSOController extends Controller
 {
-    public function login()
+    public function login() : View
     {
-        if (config('sso.enabled', true)) {
-            return Socialite::driver('keycloak')
-                ->with(['OAUTH2_PROXY_INSECURE_OIDC_ALLOW_UNVERIFIED_EMAIL' => true])
-                ->redirect();
-        }
-
         return view('auth.login');
     }
 
-    /**
-     * This is the fallback for local dev without needing to faff with SSO
-     */
-    public function doLocalLogin(Request $request)
+    public function loggedOut() : View
+    {
+        return view('auth.logged_out');
+    }
+
+    public function localLogin(Request $request) : RedirectResponse|LivewireRedirector
     {
         if (config('sso.enabled', true)) {
             abort(403, 'SSO is enabled');
@@ -45,12 +43,30 @@ class SSOController extends Controller
         return redirect()->back()->withErrors(['username' => 'Invalid credentials']);
     }
 
-    /**
-     * This is the SSO callback
-     */
-    public function handleProviderCallback(): RedirectResponse
+    public function ssoLogin() : RedirectResponse|LivewireRedirector
     {
-        $ssoUser = Socialite::driver('keycloak')->user();
+        if (config('sso.enabled', true)) {
+            $driver = Socialite::driver('keycloak');
+
+            if (request()->hasSession() && session('force_reauth')) {
+                $driver = $driver->with(['max_age' => 0]);
+                session()->forget('force_reauth');
+            }
+
+            return $driver->redirect();
+        }
+
+        return redirect()->route('login.local');
+    }
+
+    public function handleProviderCallback(): RedirectResponse|LivewireRedirector
+    {
+        try {
+            $ssoUser = Socialite::driver('keycloak')->user();
+        } catch (\Exception $e) {
+            Log::error('SSO callback failed', ['error' => $e->getMessage()]);
+            abort(403, 'Authentication failed');
+        }
 
         if ($this->forbidsStudentsFromLoggingIn($ssoUser)) {
             Log::warning('Denying student login attempt', ['email' => $ssoUser->email]);
@@ -76,12 +92,22 @@ class SSOController extends Controller
         }
 
         Auth::login($user, false);
-        session()->regenerate();  // regenerate the session ID to prevent session fixation attacks
+        session()->regenerate();
 
         return $this->getSuccessRedirect();
     }
 
-    private function getSuccessRedirect(): RedirectResponse
+    public function logout(Request $request): RedirectResponse|LivewireRedirector
+    {
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        $request->session()->put('force_reauth', true);
+
+        return redirect()->route('logged_out');
+    }
+
+    private function getSuccessRedirect(): RedirectResponse|LivewireRedirector
     {
         return redirect()->intended(route('home'));
     }
