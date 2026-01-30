@@ -32,6 +32,7 @@ variables:
   HTTPS_PROXY: "http://wwwcache.gla.ac.uk:8080"
   http_proxy: "http://wwwcache.gla.ac.uk:8080"
   https_proxy: "http://wwwcache.gla.ac.uk:8080"
+  NO_PROXY: "docker:2375,docker:2376"
 
 # This folder is cached between builds
 # http://docs.gitlab.com/ce/ci/yaml/README.html#cache
