@@ -28,6 +28,11 @@ variables:
   LOCAL_QA_IMAGE_NAME: localhost:5000/$CI_PROJECT_PATH:qa-$CI_COMMIT_SHA
   LOCAL_PROD_IMAGE_NAME: localhost:5000/$CI_PROJECT_PATH:prod-$CI_COMMIT_SHA
   DOCKER_API_VERSION: "1.44"
+  HTTP_PROXY: "http://wwwcache.gla.ac.uk:8080"
+  HTTPS_PROXY: "http://wwwcache.gla.ac.uk:8080"
+  http_proxy: "http://wwwcache.gla.ac.uk:8080"
+  https_proxy: "http://wwwcache.gla.ac.uk:8080"
+
 # This folder is cached between builds
 # http://docs.gitlab.com/ce/ci/yaml/README.html#cache
 cache:
