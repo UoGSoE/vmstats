@@ -15,6 +15,10 @@ FROM dev as prod-composer
 ENV APP_ENV=production
 ENV APP_DEBUG=0
 
+ENV http_proxy="http://wwwcache.gla.ac.uk:8080"
+ENV https_proxy="http://wwwcache.gla.ac.uk:8080"
+ENV no_proxy="docker:2375,docker:2376"
+
 WORKDIR /var/www/html
 
 USER nobody
