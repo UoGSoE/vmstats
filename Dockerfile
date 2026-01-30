@@ -56,6 +56,9 @@ FROM prod-composer as qa-composer
 ENV APP_ENV=local
 ENV APP_DEBUG=1
 
+ENV http_proxy="http://wwwcache.gla.ac.uk:8080"
+ENV https_proxy="http://wwwcache.gla.ac.uk:8080"
+ENV no_proxy="docker:2375,docker:2376"
 USER root
 RUN --mount=type=secret,id=FLUX_USERNAME \
     --mount=type=secret,id=FLUX_LICENSE_KEY \
@@ -90,6 +93,9 @@ COPY --chown=node:node resources/css* /home/node/resources/css
 COPY --chown=node:node resources/views* /home/node/resources/views
 COPY --chown=node:node --from=qa-composer /var/www/html/vendor /home/node/vendor
 
+ENV http_proxy="http://wwwcache.gla.ac.uk:8080"
+ENV https_proxy="http://wwwcache.gla.ac.uk:8080"
+ENV no_proxy="docker:2375,docker:2376"
 RUN npm install && \
     npm run build && \
     npm cache clean --force
