@@ -27,7 +27,7 @@ variables:
   PROD_IMAGE_NAME: $CI_REGISTRY/$CI_PROJECT_PATH:prod-$CI_COMMIT_SHA
   LOCAL_QA_IMAGE_NAME: localhost:5000/$CI_PROJECT_PATH:qa-$CI_COMMIT_SHA
   LOCAL_PROD_IMAGE_NAME: localhost:5000/$CI_PROJECT_PATH:prod-$CI_COMMIT_SHA
-
+  DOCKER_API_VERSION: "1.44"
 # This folder is cached between builds
 # http://docs.gitlab.com/ce/ci/yaml/README.html#cache
 cache:
