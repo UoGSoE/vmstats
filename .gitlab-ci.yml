@@ -78,6 +78,8 @@ php-security-scan:
 build-qa-tagged:
   stage: build-qa
   image: docker:stable
+  services:
+    - docker:28-dind
   script:
   - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
   - echo $FLUX_USERNAME > FLUX_USERNAME
