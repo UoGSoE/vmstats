@@ -35,6 +35,9 @@ cache:
   # - vendor/
   # - node_modules/
 
+services:
+  - docker:28-dind
+
 unit-tests:
   stage: test
 
