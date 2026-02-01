@@ -99,6 +99,8 @@ build-qa-tagged:
 build-prod-tagged:
   stage: build-prod
   image: docker:stable
+  services:
+    - docker:28-dind
   only:
   - master
   script:
