@@ -70,7 +70,10 @@ services:
     image: redis:5.0.5
     deploy: *default-deploy
     networks:
-      - private
+      private:
+        aliases:
+        - redis
+        - vmstats_redis
     volumes:
       - redis:/data
     healthcheck:
@@ -80,7 +83,10 @@ services:
     image: mysql:5.7
     deploy: *default-deploy
     networks:
-      - private
+      private:
+        aliases:
+        - mysql
+        - vmstats_mysql
     volumes:
       - mysql:/var/lib/mysql
     environment:
