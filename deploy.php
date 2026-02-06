@@ -14,7 +14,7 @@ add('writable_dirs', []);
 // Hosts
 host('gently.cose.gla.ac.uk')
     ->set('remote_user', 'deployer')
-    ->set('deploy_path', '/var/www/vmstats2.cose.gla.ac.uk/');
+    ->set('deploy_path', '/var/www/vmstats.cose.gla.ac.uk/');
 
 // Tasks
 task('build', function () {
