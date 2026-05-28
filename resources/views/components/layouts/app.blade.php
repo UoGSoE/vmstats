@@ -28,9 +28,22 @@
                         <flux:button href="{{ route('user.index') }}" variant="filled">
                             Manage Users
                         </flux:button>
+                        <flux:button href="{{ route('api_key.index') }}" variant="filled">
+                            API Keys
+                        </flux:button>
                     @elseif(request()->routeIs('user.index'))
                         <flux:button href="{{ route('home') }}" variant="filled">
                             Manage Servers
+                        </flux:button>
+                        <flux:button href="{{ route('api_key.index') }}" variant="filled">
+                            API Keys
+                        </flux:button>
+                    @elseif(request()->routeIs('api_key.index'))
+                        <flux:button href="{{ route('home') }}" variant="filled">
+                            Manage Servers
+                        </flux:button>
+                        <flux:button href="{{ route('user.index') }}" variant="filled">
+                            Manage Users
                         </flux:button>
                     @endif
                 @endisset

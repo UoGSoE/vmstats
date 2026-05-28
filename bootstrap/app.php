@@ -22,6 +22,10 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->throttleApi();
 
         $middleware->trustProxies(at: '*');
+
+        $middleware->alias([
+            'api.auth_if_enabled' => \App\Http\Middleware\ApiAuthIfEnabled::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         Integration::handles($exceptions);

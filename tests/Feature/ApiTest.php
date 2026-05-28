@@ -2,6 +2,8 @@
 
 use App\Models\Guest;
 use App\Models\Server;
+use App\Models\User;
+use Laravel\Sanctum\Sanctum;
 
 test('we can store an incoming vm guest request', function () {
     $response = $this->postJson(route('api.vm.store'), [
@@ -175,6 +177,8 @@ test('we can delete a vm guest', function () {
 });
 
 test('we can get a list of servers and their guests', function () {
+    Sanctum::actingAs(User::factory()->create());
+
     $server = Server::factory()->create(['name' => 'aaa']);
     $otherServer = Server::factory()->create(['name' => 'bbb']);
     $guest = Guest::factory()->create(['server_id' => $server->id]);
@@ -203,4 +207,48 @@ test('we can get a list of servers and their guests', function () {
             ],
         ],
     ]);
+});
+
+test('the servers index rejects unauthenticated requests', function () {
+    Server::factory()->create();
+
+    $response = $this->getJson(route('api.server.index'));
+
+    $response->assertUnauthorized();
+});
+
+test('mutating routes are open when the api_auth_required flag is off', function () {
+    config(['vmstats.api_auth_required' => false]);
+
+    $response = $this->postJson(route('api.vm.store'), [
+        'server' => 'Test Server',
+        'guest' => 'Test Guest',
+    ]);
+
+    $response->assertOk();
+});
+
+test('the vm store route rejects unauthenticated requests when the flag is on', function () {
+    config(['vmstats.api_auth_required' => true]);
+
+    $response = $this->postJson(route('api.vm.store'), [
+        'server' => 'Test Server',
+        'guest' => 'Test Guest',
+    ]);
+
+    $response->assertUnauthorized();
+});
+
+test('mutating routes accept authenticated requests when the flag is on', function () {
+    config(['vmstats.api_auth_required' => true]);
+    Sanctum::actingAs(User::factory()->create());
+
+    $response = $this->postJson(route('api.vm.store'), [
+        'server' => 'Test Server',
+        'guest' => 'Test Guest',
+    ]);
+
+    $response->assertOk();
+    expect(Server::count())->toEqual(1);
+    expect(Guest::count())->toEqual(1);
 });

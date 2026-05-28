@@ -36,4 +36,5 @@ Route::get('/logged-out', [\App\Http\Controllers\Auth\SSOController::class, 'log
 Route::middleware('auth')->group(function () {
     Route::get('/', \App\Livewire\VmList::class)->name('home');
     Route::get('/users', [\App\Http\Controllers\UserController::class, 'index'])->name('user.index');
+    Route::get('/api-keys', [\App\Http\Controllers\ApiKeyController::class, 'index'])->name('api_key.index');
 });
