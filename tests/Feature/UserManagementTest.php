@@ -80,7 +80,7 @@ test('users can add a new ldap user', function () {
     $user1 = User::factory()->create();
     $user2 = User::factory()->create();
     fakeLdapConnection();
-    \Ldap::shouldReceive('findUser')->with('abc1x')->andReturn(new LdapUser([
+    Ldap::shouldReceive('findUser')->with('abc1x')->andReturn(new LdapUser([
         [
             'uid' => ['abc1x'],
             'mail' => ['abc1x@example.com'],
@@ -114,7 +114,7 @@ test('users cant add a user that doesnt exist in ldap', function () {
     $user1 = User::factory()->create();
     $user2 = User::factory()->create();
     fakeLdapConnection();
-    \Ldap::shouldReceive('findUser')->with('abc1x')->andReturn(false);
+    Ldap::shouldReceive('findUser')->with('abc1x')->andReturn(false);
 
     Livewire::actingAs($user1)
         ->test(UserList::class)
@@ -136,7 +136,7 @@ test('users cant add the same user twice', function () {
     $user1 = User::factory()->create();
     $user2 = User::factory()->create(['username' => 'abc1x']);
     fakeLdapConnection();
-    \Ldap::shouldReceive('findUser')->with('abc1x')->andReturn(new LdapUser([
+    Ldap::shouldReceive('findUser')->with('abc1x')->andReturn(new LdapUser([
         [
             'uid' => ['abc1x'],
             'mail' => ['abc1x@example.com'],

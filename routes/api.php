@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Api\NotesController;
+use App\Http\Controllers\Api\VmController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,15 +17,15 @@ use Illuminate\Support\Facades\Route;
 
 // Read route is always protected — single known consumer who can update their caller easily.
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/servers', [\App\Http\Controllers\Api\VmController::class, 'index'])->name('api.server.index');
+    Route::get('/servers', [VmController::class, 'index'])->name('api.server.index');
 });
 
 // Mutating routes are protected only when the vmstats.api_auth_required flag is on.
 // Allows a staged rollout: ship tokens to field admins, then flip the flag.
 Route::middleware('api.auth_if_enabled')->group(function () {
-    Route::post('/vms', [\App\Http\Controllers\Api\VmController::class, 'store'])->name('api.vm.store');
-    Route::post('/vms/delete', [\App\Http\Controllers\Api\VmController::class, 'destroyGuest'])->name('api.guest.delete');
-    Route::post('/servers/delete', [\App\Http\Controllers\Api\VmController::class, 'destroyServer'])->name('api.server.delete');
-    Route::post('/server/notes', [\App\Http\Controllers\Api\NotesController::class, 'updateServer'])->name('api.server.notes');
-    Route::post('/guest/notes', [\App\Http\Controllers\Api\NotesController::class, 'updateGuest'])->name('api.guest.notes');
+    Route::post('/vms', [VmController::class, 'store'])->name('api.vm.store');
+    Route::post('/vms/delete', [VmController::class, 'destroyGuest'])->name('api.guest.delete');
+    Route::post('/servers/delete', [VmController::class, 'destroyServer'])->name('api.server.delete');
+    Route::post('/server/notes', [NotesController::class, 'updateServer'])->name('api.server.notes');
+    Route::post('/guest/notes', [NotesController::class, 'updateGuest'])->name('api.guest.notes');
 });

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\ApiAuthIfEnabled;
 use App\Providers\AppServiceProvider;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -24,7 +25,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->trustProxies(at: '*');
 
         $middleware->alias([
-            'api.auth_if_enabled' => \App\Http\Middleware\ApiAuthIfEnabled::class,
+            'api.auth_if_enabled' => ApiAuthIfEnabled::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
