@@ -30,7 +30,7 @@
                         </flux:table.cell>
                     </flux:table.row>
 
-                    <flux:modal :name="'revoke-'.$token->id" class="md:w-[32rem]" wire:key="revoke-modal-{{ $token->id }}">
+                    <flux:modal :name="'revoke-'.$token->id" class="md:w-[44rem]" wire:key="revoke-modal-{{ $token->id }}">
                         <div class="space-y-6">
                             <flux:heading size="lg">Revoke API token</flux:heading>
 
@@ -49,10 +49,10 @@
                             </flux:callout>
 
                             <flux:select
-                                wire:model="transferTargets.{{ $token->id }}"
+                                wire:model.live="transferTargets.{{ $token->id }}"
                                 label="Transfer to"
-                                placeholder="Choose a user…"
                             >
+                                <flux:select.option value="">Choose a user…</flux:select.option>
                                 @foreach ($users as $candidate)
                                     @if ($candidate->id !== $token->tokenable_id)
                                         <flux:select.option value="{{ $candidate->id }}">{{ $candidate->username }}</flux:select.option>

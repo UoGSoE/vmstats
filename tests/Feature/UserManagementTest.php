@@ -2,6 +2,7 @@
 
 use App\Livewire\UserList;
 use App\Models\User;
+use Laravel\Sanctum\PersonalAccessToken;
 use Livewire\Livewire;
 use Ohffs\Ldap\FakeLdapConnection;
 use Ohffs\Ldap\LdapConnectionInterface;
@@ -34,12 +35,45 @@ test('users can delete an existing user but not themselves', function () {
         ->test(UserList::class)
         ->assertSee($user1->username)
         ->assertSee($user2->username)
-        ->call('deleteUser', $user2->id)
+        ->call('confirmDeleteUser', $user2->id)
         ->assertSee($user1->username)
         ->assertDontSee($user2->username)
-        ->call('deleteUser', $user1->id)
+        ->call('confirmDeleteUser', $user1->id)
         ->assertSee($user1->username)
         ->assertDontSee($user2->username);
+});
+
+test('deleting a user also removes their api tokens', function () {
+    $user1 = User::factory()->create();
+    $doomed = User::factory()->create();
+    $doomed->createToken('soon-to-be-gone');
+
+    expect(PersonalAccessToken::count())->toBe(1);
+
+    Livewire::actingAs($user1)
+        ->test(UserList::class)
+        ->call('confirmDeleteUser', $doomed->id);
+
+    expect(User::find($doomed->id))->toBeNull();
+    expect(PersonalAccessToken::count())->toBe(0);
+});
+
+test('a leaving user can have their tokens transferred to another user before deletion', function () {
+    $admin = User::factory()->create();
+    $leaver = User::factory()->create();
+    $heir = User::factory()->create();
+    $token = $leaver->createToken('field-kvm-host-7')->accessToken;
+    $originalHash = $token->token;
+
+    Livewire::actingAs($admin)
+        ->test(UserList::class)
+        ->call('transferTokensAndDeleteUser', $leaver->id, $heir->id);
+
+    expect(User::find($leaver->id))->toBeNull();
+    expect(PersonalAccessToken::count())->toBe(1);
+    $token->refresh();
+    expect($token->tokenable_id)->toBe($heir->id);
+    expect($token->token)->toBe($originalHash);
 });
 
 test('users can add a new ldap user', function () {

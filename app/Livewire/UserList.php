@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\User;
+use Flux\Flux;
 use Illuminate\Support\Str;
 use Livewire\Component;
 
@@ -18,10 +19,13 @@ class UserList extends Component
 
     public $error = null;
 
+    /** @var array<int, int|null> user id => target user id for token transfer */
+    public array $transferTargets = [];
+
     public function render()
     {
         return view('livewire.user-list', [
-            'users' => User::orderBy('surname')->get(),
+            'users' => User::orderBy('surname')->withCount('tokens')->get(),
         ]);
     }
 
@@ -72,11 +76,35 @@ class UserList extends Component
         $this->reset();
     }
 
-    public function deleteUser($userId)
+    public function confirmDeleteUser($userId)
     {
         if (auth()->id() == $userId) {
             return;
         }
-        User::findOrFail($userId)->delete();
+        $user = User::findOrFail($userId);
+        // Cascade: kill any tokens the user owns. Sanctum doesn't FK-cascade.
+        $user->tokens()->delete();
+        $user->delete();
+        Flux::modal("delete-user-{$userId}")->close();
+    }
+
+    public function transferTokensAndDeleteUser($userId, $targetUserId)
+    {
+        if (auth()->id() == $userId || ! $targetUserId || $userId == $targetUserId) {
+            return;
+        }
+        $user = User::findOrFail($userId);
+        $target = User::findOrFail($targetUserId);
+
+        // Reparent each token. tokenable_id is outside Sanctum's $fillable
+        // so we set it directly rather than via update().
+        foreach ($user->tokens as $token) {
+            $token->tokenable_id = $target->id;
+            $token->save();
+        }
+
+        $user->delete();
+        unset($this->transferTargets[$userId]);
+        Flux::modal("delete-user-{$userId}")->close();
     }
 }
