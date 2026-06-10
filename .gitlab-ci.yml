@@ -41,8 +41,9 @@ cache:
   # - vendor/
   # - node_modules/
 
+# docker:28 and docker:28-dind currently share this digest; pinned 2026-06-10
 services:
-  - docker:28-dind
+  - docker:28-dind@sha256:2a232a42256f70d78e3cc5d2b5d6b3276710a0de0596c145f627ecfae90282ac
 
 unit-tests:
   stage: test
@@ -86,9 +87,9 @@ php-security-scan:
 
 build-qa-tagged:
   stage: build-qa
-  image: docker:stable
+  image: docker:28@sha256:2a232a42256f70d78e3cc5d2b5d6b3276710a0de0596c145f627ecfae90282ac # was docker:stable (frozen at v19 since 2020); pinned 2026-06-10
   services:
-    - docker:28-dind
+    - docker:28-dind@sha256:2a232a42256f70d78e3cc5d2b5d6b3276710a0de0596c145f627ecfae90282ac
   script:
   - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
   - echo $FLUX_USERNAME > FLUX_USERNAME
@@ -98,9 +99,9 @@ build-qa-tagged:
 
 build-prod-tagged:
   stage: build-prod
-  image: docker:stable
+  image: docker:28@sha256:2a232a42256f70d78e3cc5d2b5d6b3276710a0de0596c145f627ecfae90282ac # was docker:stable (frozen at v19 since 2020); pinned 2026-06-10
   services:
-    - docker:28-dind
+    - docker:28-dind@sha256:2a232a42256f70d78e3cc5d2b5d6b3276710a0de0596c145f627ecfae90282ac
   only:
   - master
   script:
@@ -114,7 +115,7 @@ deploy_to_qa:
   stage: deploy
   when: manual
   environment: qa
-  image: docker:stable
+  image: docker:28@sha256:2a232a42256f70d78e3cc5d2b5d6b3276710a0de0596c145f627ecfae90282ac # was docker:stable (frozen at v19 since 2020); pinned 2026-06-10
   script:
   - apk add -qU openssh curl
   - eval $(ssh-agent -s)
@@ -140,7 +141,7 @@ deploy_to_prod:
   only:
   - master
   environment: prod
-  image: docker:stable
+  image: docker:28@sha256:2a232a42256f70d78e3cc5d2b5d6b3276710a0de0596c145f627ecfae90282ac # was docker:stable (frozen at v19 since 2020); pinned 2026-06-10
   script:
   - apk add -qU openssh curl
   - eval $(ssh-agent -s)

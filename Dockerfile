@@ -75,7 +75,8 @@ RUN --mount=type=secret,id=FLUX_USERNAME \
 
 
 ### Build JS/css assets
-FROM node:22.13.1 as frontend
+#- digest pinned 2026-06-10; dependabot's docker ecosystem raises bump PRs on the GitHub mirror
+FROM node:22.13.1@sha256:5145c882f9e32f07dd7593962045d97f221d57a1b609f5bf7a807eb89deff9d6 as frontend
 
 # workaround for mix.version() webpack bug
 RUN ln -s /home/node/public /public
@@ -96,7 +97,7 @@ COPY --chown=node:node --from=qa-composer /var/www/html/vendor /home/node/vendor
 ENV http_proxy="http://wwwcache.gla.ac.uk:8080"
 ENV https_proxy="http://wwwcache.gla.ac.uk:8080"
 ENV no_proxy="docker:2375,docker:2376"
-RUN npm install && \
+RUN npm ci && \
     npm run build && \
     npm cache clean --force
 
