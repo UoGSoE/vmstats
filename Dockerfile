@@ -76,7 +76,7 @@ RUN --mount=type=secret,id=FLUX_USERNAME \
 
 ### Build JS/css assets
 #- digest pinned 2026-06-10; dependabot's docker ecosystem raises bump PRs on the GitHub mirror
-FROM node:22.13.1@sha256:5145c882f9e32f07dd7593962045d97f221d57a1b609f5bf7a807eb89deff9d6 as frontend
+FROM node:26.6.0@sha256:3e9ed202a2401a08687cb02367f7454a51c2a9e757d8e45728ec97a3c6241158 as frontend
 
 # workaround for mix.version() webpack bug
 RUN ln -s /home/node/public /public
